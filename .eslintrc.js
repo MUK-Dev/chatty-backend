@@ -11,7 +11,6 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   root: true,
-  endOfLine: 'auto',
   env: {
     node: true,
     jest: true,
