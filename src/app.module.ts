@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { User } from './user/entities/user.entity';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { UserModule } from './user/user.module';
       port: parseInt(process.env.DB_PORT),
       password: process.env.DB_PASSWORD,
       username: process.env.DB_USERNAME,
-      entities: [],
+      entities: [User],
       database: process.env.DB,
       synchronize: true,
       logging: true,

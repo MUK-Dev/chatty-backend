@@ -22,4 +22,10 @@ export class User {
 
   @Column({ type: 'enum', enum: ['m', 'f', 'u'] })
   gender: string;
+
+  @Column({ type: 'enum', enum: ['user', 'admin', 'moderator'] })
+  role: string;
+
+  @Column({ type: 'varchar' })
+  avatar: string;
 }

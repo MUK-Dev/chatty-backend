@@ -14,6 +14,7 @@ const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const auth_module_1 = require("./auth/auth.module");
 const user_module_1 = require("./user/user.module");
+const user_entity_1 = require("./user/entities/user.entity");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -28,7 +29,7 @@ exports.AppModule = AppModule = __decorate([
                 port: parseInt(process.env.DB_PORT),
                 password: process.env.DB_PASSWORD,
                 username: process.env.DB_USERNAME,
-                entities: [],
+                entities: [user_entity_1.User],
                 database: process.env.DB,
                 synchronize: true,
                 logging: true,

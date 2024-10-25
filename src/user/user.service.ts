@@ -1,26 +1,56 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+  ) {}
+
+  create(createUserDto: CreateUserDto): Promise<User> {
+    const user: User = new User();
+    user.name = createUserDto.name;
+    user.age = createUserDto.age;
+    user.email = createUserDto.email;
+    user.username = createUserDto.username;
+    user.password = createUserDto.password;
+    user.gender = createUserDto.gender;
+
+    if (!createUserDto.role) user.role = 'user';
+    else user.role = createUserDto.role;
+
+    user.avatar = `https://api.dicebear.com/9.x/notionists-neutral/svg?seed=${createUserDto.name}`;
+
+    return this.userRepository.save(user);
   }
 
-  findAll() {
-    return `This action returns all user`;
+  findAll(): Promise<User[]> {
+    return this.userRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findOne(id: number): Promise<User> {
+    return this.userRepository.findOneBy({ id });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+    const user: User = new User();
+    user.name = updateUserDto.name;
+    user.age = updateUserDto.age;
+    user.email = updateUserDto.email;
+    user.username = updateUserDto.username;
+    user.password = updateUserDto.password;
+    user.gender = updateUserDto.gender;
+    user.role = updateUserDto.role;
+    user.id = id;
+
+    return this.userRepository.save(user);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  remove(id: number): Promise<{ affected?: number }> {
+    return this.userRepository.delete(id);
   }
 }
