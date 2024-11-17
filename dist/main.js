@@ -9,6 +9,14 @@ async function bootstrap() {
         .setTitle('Chatty')
         .setDescription('')
         .setVersion('0.0.1')
+        .addBearerAuth({
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        in: 'header',
+        name: 'Authorization',
+        description: 'No need to type Bearer before token',
+    })
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, config);
     swagger_1.SwaggerModule.setup('api', app, document);
