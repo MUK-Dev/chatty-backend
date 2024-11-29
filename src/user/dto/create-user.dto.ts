@@ -1,17 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsAlphanumeric,
   IsEmail,
   IsEnum,
   IsInt,
   IsNotEmpty,
   IsString,
-  Matches,
+  MaxLength,
   MinLength,
 } from 'class-validator';
-
-const passwordRegEx =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@$!%*?&])[A-Za-zd@$!%*?&]{8,20}$/;
 
 export class CreateUserDto {
   @ApiProperty()
@@ -23,14 +19,11 @@ export class CreateUserDto {
   @ApiProperty()
   @IsNotEmpty()
   @MinLength(3, { message: 'Username must have atleast 3 characters.' })
-  @IsAlphanumeric(null, {
-    message: 'Username does not allow other than alpha numeric chars.',
-  })
   username: string;
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsEmail(null, { message: 'Please provide valid Email.' })
+  @IsEmail({}, { message: 'Please provide valid Email.' })
   email: string;
 
   @ApiProperty()
@@ -44,17 +37,7 @@ export class CreateUserDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @Matches(passwordRegEx, {
-    message: `Password must contain Minimum 8 and maximum 20 characters, 
-    at least one uppercase letter, 
-    one lowercase letter, 
-    one number and 
-    one special character`,
-  })
+  @MinLength(8, { message: 'Password should be atleast 8 characters' })
+  @MaxLength(20, { message: 'Password can be max 20 characters' })
   password: string;
-
-  @ApiProperty({ enum: ['user', 'admin', 'moderator'] })
-  @IsString()
-  @IsEnum(['user', 'admin', 'moderator'])
-  role: string;
 }

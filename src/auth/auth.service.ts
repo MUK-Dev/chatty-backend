@@ -16,9 +16,9 @@ export class AuthService {
   ) {}
 
   async register(registerDto: CreateUserDto) {
-    // console.log('-------- registerDto --------');
-    // console.log(registerDto);
-    // console.log('-----------------------------');
+    console.log('-------- registerDto --------');
+    console.log(registerDto);
+    console.log('-----------------------------');
 
     try {
       registerDto.password = await bcrypt.hash(
@@ -28,7 +28,7 @@ export class AuthService {
     } catch (err) {
       console.log(err);
 
-      return new HttpException(
+      throw new HttpException(
         'Something went wrong',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
@@ -59,7 +59,7 @@ export class AuthService {
     } catch (err) {
       console.log(err);
 
-      return new HttpException(
+      throw new HttpException(
         'Something went wrong',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
@@ -71,11 +71,11 @@ export class AuthService {
       const user = await this.userService.findOne(loginDto.email);
 
       if (!user) {
-        return new HttpException('Wrong email', HttpStatus.BAD_REQUEST);
+        throw new HttpException('Wrong email', HttpStatus.BAD_REQUEST);
       }
 
       if (!bcrypt.compare(loginDto.password, user.password)) {
-        return new HttpException('Wrong password', HttpStatus.BAD_REQUEST);
+        throw new HttpException('Wrong password', HttpStatus.BAD_REQUEST);
       }
 
       const payload = {
@@ -99,9 +99,12 @@ export class AuthService {
         statusCode: HttpStatus.CREATED,
       };
     } catch (err) {
-      console.log(err);
+      if (err instanceof HttpException) {
+        throw err;
+      }
 
-      return new HttpException(
+      console.error('Unexpected Error:', err);
+      throw new HttpException(
         'Something went wrong',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );

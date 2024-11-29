@@ -20,9 +20,6 @@ export class UserService {
     user.password = createUserDto.password;
     user.gender = createUserDto.gender;
 
-    if (!createUserDto.role) user.role = 'user';
-    else user.role = createUserDto.role;
-
     user.avatar = `https://api.dicebear.com/9.x/notionists-neutral/svg?seed=${createUserDto.name}`;
 
     return this.userRepository.save(user);
@@ -48,7 +45,6 @@ export class UserService {
     user.username = updateUserDto.username;
     user.password = updateUserDto.password;
     user.gender = updateUserDto.gender;
-    user.role = updateUserDto.role;
     user.id = id;
 
     return this.userRepository.save(user);
